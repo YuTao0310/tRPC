@@ -28,7 +28,7 @@
     <modules>
         <module>trpc-common</module>
         <module>trpc-simple</module>
-        <module>hello-service-api</module>
+        <module>trpc-service-api</module>
         <module>trpc-examples</module>
     </modules>
 
