@@ -18,6 +18,7 @@ public class CustomShutdownHook {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             InetSocketAddress inetSocketAddress = new InetSocketAddress(host, port);
             CuratorUtils.clearRegistry(CuratorUtils.getZkClient(), inetSocketAddress);
+            log.info("cancel registering : " + inetSocketAddress);
             ThreadPoolFactoryUtil.shutDownAllThreadPool();
         }));
     }

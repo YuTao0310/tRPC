@@ -17,6 +17,7 @@ JDK Dynamic Proxy只能代理实现接口的类（相当于代理类和实际类
 
 - [x] client端在zookeeper上开启监听器
 - [x] server端关闭服务后取消在zookeeper测的注册
+- [ ] server端使用^C能够取消注册，但直接关闭命令窗口无法取消注册，需要解决这一问题
 
 **4、client端开启负载均衡策略**
 

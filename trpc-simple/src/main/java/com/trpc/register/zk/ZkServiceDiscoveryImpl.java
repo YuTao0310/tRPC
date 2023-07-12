@@ -6,6 +6,8 @@ import org.apache.curator.framework.CuratorFramework;
 import com.trpc.dto.RpcRequest;
 import com.trpc.enums.RpcErrorMessageEnum;
 import com.trpc.exception.RpcException;
+import com.trpc.loadbalance.LoadBalance;
+import com.trpc.loadbalance.loadbalancer.RandomLoadBalance;
 import com.trpc.register.ServiceDiscovery;
 import com.trpc.utils.CollectionUtil;
 
@@ -17,7 +19,11 @@ import java.util.List;
  */
 @Slf4j
 public class ZkServiceDiscoveryImpl implements ServiceDiscovery {
+    private final LoadBalance loadBalance;
 
+    public ZkServiceDiscoveryImpl() {
+        loadBalance = new RandomLoadBalance();
+    }
     @Override
     public InetSocketAddress lookupService(RpcRequest rpcRequest) {
         String rpcServiceName = rpcRequest.getRpcServiceName();
@@ -26,7 +32,7 @@ public class ZkServiceDiscoveryImpl implements ServiceDiscovery {
         if (CollectionUtil.isEmpty(serviceUrlList)) {
             throw new RpcException(RpcErrorMessageEnum.SERVICE_CAN_NOT_BE_FOUND, rpcServiceName);
         }
-        String targetServiceUrl = serviceUrlList.get(0);
+        String targetServiceUrl = loadBalance.selectServiceAddress(serviceUrlList, rpcRequest);
         log.info("Successfully found the service address:[{}]", targetServiceUrl);
         String[] socketAddressArray = targetServiceUrl.split(":");
         String host = socketAddressArray[0];
