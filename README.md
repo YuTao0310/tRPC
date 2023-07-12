@@ -5,4 +5,4 @@ JDK自带序列化协议方式通过对象实现Serializable接口的方式来�
 
 - [ ] 注意研究server端绑定不同的ip(localhost, 私网ip，公网ip)，client能否连接成功。
 
-* 2
+* **2、使用JDK Dynamic Proxy来代理客户端向服务端发送消息**
