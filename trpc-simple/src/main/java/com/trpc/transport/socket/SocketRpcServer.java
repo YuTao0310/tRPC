@@ -19,14 +19,36 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SocketRpcServer implements RpcServerTransport{
 
+    public static final int DEFAULT_PORT = 9998;
+    public static final String DEFAULT_HOST = "127.0.0.1";
+
     private final ExecutorService threadPool;
     private final ServiceProvider serviceProvider;
-    public static final int PORT = 9998;
 
+    private int port = DEFAULT_PORT;
+    private String host = DEFAULT_HOST;
+
+    // public static final String DEFAULT_HOST = InetAddress.getLocalHost().getHostAddress()
 
     public SocketRpcServer() {
         threadPool = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("socket-server-rpc-pool");
         serviceProvider = SingletonFactory.getInstance(SimpleServiceProviderImpl.class);
+    }
+
+    public SocketRpcServer(int port) {
+        this();
+        this.port = port;
+    }
+
+    public SocketRpcServer(String host) {
+        this();
+        this.host = host;
+    }
+
+    public SocketRpcServer(String host, int port) {
+        this();
+        this.port = port;
+        this.host = host;
     }
 
     @Override
@@ -37,8 +59,7 @@ public class SocketRpcServer implements RpcServerTransport{
     @Override
     public void start() {
         try (ServerSocket server = new ServerSocket()) {
-            String host = InetAddress.getLocalHost().getHostAddress();
-            server.bind(new InetSocketAddress(host, PORT));
+            server.bind(new InetSocketAddress(host, port));
             Socket socket;
             while ((socket = server.accept()) != null) {
                 log.info("client connected [{}]", socket.getInetAddress());

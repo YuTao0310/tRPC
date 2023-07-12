@@ -18,7 +18,7 @@ public class SocketClientMain {
         RpcServiceConfig rpcServiceConfig = new RpcServiceConfig();
         RpcRequest rpcRequest = RpcRequest.builder().methodName("hello")
                 .parameters(new Object[]{(Object)new Hello("detailed message", "detailed description")})
-                .interfaceName("HelloService")
+                .interfaceName(HelloService.class.getName())
                 .paramTypes(new Class[]{Hello.class})
                 .requestId(UUID.randomUUID().toString())
                 .group(rpcServiceConfig.getGroup())

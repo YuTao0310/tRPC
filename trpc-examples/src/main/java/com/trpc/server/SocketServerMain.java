@@ -6,7 +6,6 @@ import com.trpc.server.serviceImpl.HelloServiceImpl;
 import com.trpc.transport.RpcServerTransport;
 import com.trpc.transport.socket.SocketRpcServer;
 
-import lombok.extern.slf4j.Slf4j;
 
 public class SocketServerMain {
     public static void main(String[] args) {
