@@ -8,15 +8,22 @@ import java.net.Socket;
 
 import com.trpc.dto.RpcRequest;
 import com.trpc.exception.RpcException;
+import com.trpc.register.ServiceDiscovery;
+import com.trpc.register.zk.ZkServiceDiscoveryImpl;
 import com.trpc.transport.RpcClientTransport;
 
 
 
 public class SocketRpcClient implements RpcClientTransport{
+    private final ServiceDiscovery serviceDiscovery;
+
+    public SocketRpcClient() {
+        serviceDiscovery  = new ZkServiceDiscoveryImpl();
+    }
 
     @Override
     public Object sendRpcRequest(RpcRequest rpcRequest) {
-        InetSocketAddress inetSocketAddress = new InetSocketAddress("127.0.0.1", 9998);
+        InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
         try (Socket socket = new Socket()) {
             socket.connect(inetSocketAddress);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());

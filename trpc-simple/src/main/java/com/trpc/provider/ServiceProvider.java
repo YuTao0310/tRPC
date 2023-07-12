@@ -5,11 +5,6 @@ import com.trpc.config.RpcServiceConfig;
 public interface ServiceProvider {
 
     /**
-     * @param rpcServiceConfig rpc service related attributes
-     */
-    void addService(RpcServiceConfig rpcServiceConfig);
-
-    /**
      * @param rpcServiceName rpc service name
      * @return service object
      */

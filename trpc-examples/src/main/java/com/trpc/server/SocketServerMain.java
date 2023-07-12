@@ -9,9 +9,11 @@ import com.trpc.transport.socket.SocketRpcServer;
 
 public class SocketServerMain {
     public static void main(String[] args) {
-         HelloService helloService = new HelloServiceImpl();
+        HelloService helloService = new HelloServiceImpl();
         RpcServerTransport rpcServerTransport = new SocketRpcServer();
         RpcServiceConfig rpcServiceConfig = new RpcServiceConfig();
+        rpcServiceConfig.setHost("127.0.0.1");
+        rpcServiceConfig.setPort(9999);
         rpcServiceConfig.setService(helloService);
         rpcServerTransport.registerService(rpcServiceConfig);  
         rpcServerTransport.start();

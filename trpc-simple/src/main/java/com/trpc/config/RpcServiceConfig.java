@@ -15,18 +15,32 @@ import lombok.ToString;
 @ToString
 public class RpcServiceConfig {
     /**
-     * service version
+     * service version (in server client)
      */
+    @Builder.Default
     private String version = "";
     /**
-     * when the interface has multiple implementation classes, distinguish by group
+     * when the interface has multiple implementation classes, distinguish by group (in server client)
      */
+    @Builder.Default
     private String group = "";
 
     /**
-     * target service
+     * target service(in server)
      */
     private Object service;
+
+    /**
+     * target host (in server)
+     */
+    @Builder.Default
+    private String host = "127.0.0.1";
+
+    /**
+     * target port (in server)
+     */
+    @Builder.Default
+    private int port = 9998;
 
     public String getRpcServiceName() {
         return this.getServiceName() + this.getGroup() + this.getVersion();
