@@ -16,6 +16,6 @@ JDK Dynamic Proxy只能代理实现接口的类（相当于代理类和实际类
 **3、使用zookeeper来管理注册和订阅服务**
 
 - [x] client端在zookeeper上开启监听器
-- [ ] server端关闭服务后取消在zookeeper测的注册
+- [x] server端关闭服务后取消在zookeeper测的注册
 
 - [ ] **4、client端开启负载均衡策略**

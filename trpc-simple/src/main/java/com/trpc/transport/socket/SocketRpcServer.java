@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 
+import com.trpc.config.CustomShutdownHook;
 import com.trpc.config.RpcServiceConfig;
 import com.trpc.provider.ServiceProvider;
 import com.trpc.provider.impl.ZkServiceProviderImpl;
@@ -41,6 +42,7 @@ public class SocketRpcServer implements RpcServerTransport{
 
     @Override
     public void start() {
+        CustomShutdownHook.clearAll(host, port);
         try (ServerSocket server = new ServerSocket()) {
             server.bind(new InetSocketAddress(host, port));
             Socket socket;
