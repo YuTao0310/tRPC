@@ -7,9 +7,10 @@ import com.trpc.dto.RpcRequest;
 import com.trpc.enums.RpcErrorMessageEnum;
 import com.trpc.exception.RpcException;
 import com.trpc.loadbalance.LoadBalance;
-import com.trpc.loadbalance.loadbalancer.RandomLoadBalance;
+import com.trpc.loadbalance.loadbalancer.ConsistentHashLoadBalance;
 import com.trpc.register.ServiceDiscovery;
 import com.trpc.utils.CollectionUtil;
+import com.trpc.utils.singleton.SingletonFactory;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -22,7 +23,7 @@ public class ZkServiceDiscoveryImpl implements ServiceDiscovery {
     private final LoadBalance loadBalance;
 
     public ZkServiceDiscoveryImpl() {
-        loadBalance = new RandomLoadBalance();
+        loadBalance = SingletonFactory.getInstance(ConsistentHashLoadBalance.class);
     }
     @Override
     public InetSocketAddress lookupService(RpcRequest rpcRequest) {
