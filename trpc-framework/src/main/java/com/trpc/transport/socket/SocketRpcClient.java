@@ -11,6 +11,7 @@ import com.trpc.exception.RpcException;
 import com.trpc.register.ServiceDiscovery;
 import com.trpc.register.zk.ZkServiceDiscoveryImpl;
 import com.trpc.transport.RpcClientTransport;
+import com.trpc.utils.singleton.SingletonFactory;
 
 
 
@@ -18,7 +19,7 @@ public class SocketRpcClient implements RpcClientTransport{
     private final ServiceDiscovery serviceDiscovery;
 
     public SocketRpcClient() {
-        serviceDiscovery  = new ZkServiceDiscoveryImpl();
+        serviceDiscovery  = SingletonFactory.getInstance(ZkServiceDiscoveryImpl.class);
     }
 
     @Override

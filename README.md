@@ -28,3 +28,8 @@ JDK Dynamic Proxy只能代理实现接口的类（相当于代理类和实际类
 - [x] 一致性哈希策略法
 - [ ] 轮询法
 - [ ] 最小连接法
+
+**5、netty NIO替代BIO socket**
+
+- [x] zookeeper管理策略
+- [x] JDK CGLIB动态代理

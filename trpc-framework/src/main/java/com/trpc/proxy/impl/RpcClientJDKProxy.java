@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import com.trpc.config.RpcServiceConfig;
 import com.trpc.dto.RpcRequest;
@@ -14,8 +15,10 @@ import com.trpc.exception.RpcException;
 import com.trpc.proxy.ResultChecker;
 import com.trpc.proxy.RpcClientProxy;
 import com.trpc.transport.RpcClientTransport;
+import com.trpc.transport.netty.NettyRpcClient;
 import com.trpc.transport.socket.SocketRpcClient;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -52,6 +55,7 @@ public class RpcClientJDKProxy implements RpcClientProxy, InvocationHandler{
     }
 
     @Override
+    @SneakyThrows
     @SuppressWarnings("unchecked")
     public Object invoke(Object proxy, Method method, Object[] args) {
         log.info("JDK Dynamic proxy invoked method: [{}]", method.getName());
@@ -67,6 +71,11 @@ public class RpcClientJDKProxy implements RpcClientProxy, InvocationHandler{
 
         if (rpcClientTransport instanceof SocketRpcClient) {
             rpcResponse = (RpcResponse<Object>) rpcClientTransport.sendRpcRequest(rpcRequest);
+        }
+
+        if (rpcClientTransport instanceof NettyRpcClient) {
+            CompletableFuture<RpcResponse<Object>> completableFuture = (CompletableFuture<RpcResponse<Object>>) rpcClientTransport.sendRpcRequest(rpcRequest);
+            rpcResponse = completableFuture.get();
         }
         ResultChecker.check(rpcResponse, rpcRequest);
         return rpcResponse.getData();
