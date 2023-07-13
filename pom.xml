@@ -29,7 +29,7 @@
 
     <modules>
         <module>trpc-common</module>
-        <module>trpc-simple</module>
+        <module>trpc-framework</module>
         <module>trpc-service-api</module>
         <module>trpc-examples</module>
     </modules>

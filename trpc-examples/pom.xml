@@ -11,7 +11,7 @@
     <dependencies>
         <dependency>
             <groupId>com.trpc</groupId>
-            <artifactId>trpc-simple</artifactId>
+            <artifactId>trpc-framework</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
