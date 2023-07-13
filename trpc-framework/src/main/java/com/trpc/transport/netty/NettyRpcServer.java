@@ -15,7 +15,6 @@ import com.trpc.utils.threadpool.ThreadPoolFactoryUtil;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
@@ -23,6 +22,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
@@ -68,6 +69,8 @@ public class NettyRpcServer implements RpcServerTransport{
                         protected void initChannel(SocketChannel ch) {
                             // 30 秒之内没有收到客户端请求的话就关闭连接
                             ChannelPipeline p = ch.pipeline();
+                            p.addLast(new ObjectEncoder());
+                            p.addLast(new ObjectDecoder(Class::forName));
                             p.addLast(serviceHandlerGroup, new NettyRpcServerHandler());
                         }
                     });

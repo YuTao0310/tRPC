@@ -33,3 +33,5 @@ JDK Dynamic Proxy只能代理实现接口的类（相当于代理类和实际类
 
 - [x] zookeeper管理策略
 - [x] JDK CGLIB动态代理
+- [x] 使用JDK自带的CompletableFuture异步获取结果，将获取结果的逻辑从NettyRpcClient移动到Proxy中来，如果需要应用到具体业务上可以考虑从Proxy层移动到上层应用中来
+- [x] 使用JDK自带的序列化协议进行编码解码(ObjectEncoder, ObjectDecoder)

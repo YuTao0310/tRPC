@@ -33,7 +33,7 @@ public class NettyServerMain {
     }
     public static void main(String[] args) {
         ExecutorService executors = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("server-number");
-        int start = 9990, count = 1;
+        int start = 9990, count = 5;
         HelloService helloService = new HelloServiceImpl();
         for (int i = 0; i < count; i++) {
             RpcServiceConfig rpcServiceConfig = new RpcServiceConfig();
