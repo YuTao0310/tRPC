@@ -7,8 +7,7 @@ import com.trpc.proxy.RpcClientProxy;
 import com.trpc.proxy.impl.RpcClientCglibProxy;
 import com.trpc.proxy.impl.RpcClientJDKProxy;
 import com.trpc.transport.RpcClientTransport;
-import com.trpc.transport.netty.NettyRpcClient;
-import com.trpc.transport.socket.SocketRpcClient;
+import com.trpc.transport.netty.client.NettyRpcClient;
 
 
 public class NettyClientMain {

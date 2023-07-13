@@ -6,7 +6,7 @@ import com.trpc.config.RpcServiceConfig;
 import com.trpc.hello.HelloService;
 import com.trpc.server.serviceImpl.HelloServiceImpl;
 import com.trpc.transport.RpcServerTransport;
-import com.trpc.transport.netty.NettyRpcServer;
+import com.trpc.transport.netty.server.NettyRpcServer;
 import com.trpc.transport.socket.SocketRpcServer;
 import com.trpc.utils.threadpool.ThreadPoolFactoryUtil;
 

@@ -1,6 +1,5 @@
-package com.trpc.transport.netty;
+package com.trpc.transport.netty.client;
 
-import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.util.concurrent.CompletableFuture;
 
@@ -13,7 +12,6 @@ import com.trpc.utils.singleton.SingletonFactory;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;

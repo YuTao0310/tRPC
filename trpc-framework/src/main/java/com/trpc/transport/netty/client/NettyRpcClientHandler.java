@@ -1,6 +1,5 @@
-package com.trpc.transport.netty;
+package com.trpc.transport.netty.client;
 
-import com.trpc.dto.RpcRequest;
 import com.trpc.dto.RpcResponse;
 import com.trpc.utils.singleton.SingletonFactory;
 

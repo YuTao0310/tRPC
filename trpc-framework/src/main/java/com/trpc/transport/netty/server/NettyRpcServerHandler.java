@@ -1,4 +1,4 @@
-package com.trpc.transport.netty;
+package com.trpc.transport.netty.server;
 
 import com.trpc.dto.RpcRequest;
 import com.trpc.dto.RpcResponse;
