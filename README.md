@@ -47,3 +47,5 @@ JDK Dynamic Proxy只能代理实现接口的类（相当于代理类和实际类
 
 **7、netty client重用channel节省资源**
 - [x] 在同一个进程中，client端连接同一个server时，发送多次消息时能够利用同一个channel，从而来防止重新建立链接，节省建链时间。
+
+**8、netty引用gzip压缩传输对象大小**

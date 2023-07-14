@@ -2,6 +2,8 @@ package com.trpc.transport.netty.codec;
 
 import java.util.List;
 
+import com.trpc.compress.Compress;
+import com.trpc.compress.gzip.GzipCompress;
 import com.trpc.dto.RpcRequest;
 import com.trpc.dto.RpcResponse;
 import com.trpc.serialize.Serializer;
@@ -18,9 +20,11 @@ public class RpcMessageDecoder extends ByteToMessageDecoder {
     @Override
      protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         Serializer serializer = SingletonFactory.getInstance(HessianSerializer.class);
+        Compress compress = SingletonFactory.getInstance(GzipCompress.class);
         byte dataType = in.readByte();
         byte[] bs = new byte[in.readInt()];
         in.readBytes(bs);
+        bs = compress.decompress(bs);
         if (dataType == 0) {
             out.add(serializer.deserialize(bs, RpcRequest.class));
         } else {
