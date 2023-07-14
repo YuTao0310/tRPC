@@ -91,7 +91,15 @@ public class NettyRpcClient implements RpcClientTransport {
                 log.error("Send failed:", future.cause());
             }
         });
+        // 如果使用下述表达式，client端将不会终止运行
+        // channel.closeFuture().sync();
         return resultFuture;
+    }
+
+    @Override
+    public void close() {
+        log.info("shutdown eventLoopGroup");
+        eventLoopGroup.shutdownGracefully();
     }
 
     

@@ -18,6 +18,6 @@ public class SocketClientMain {
         RpcClientProxy rpcClientProxy = new RpcClientCglibProxy(rpcClientTransport, rpcServiceConfig);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
         System.out.println(helloService.hello(new Hello("detailed message", "detailed description")));
-
+        rpcClientTransport.close();
     }
 }

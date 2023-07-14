@@ -50,5 +50,10 @@ public class SocketRpcClient implements RpcClientTransport{
             throw new RpcException("调用服务失败:", e);
         }
     }
+
+    @Override
+    public void close() {
+        
+    }
     
 }

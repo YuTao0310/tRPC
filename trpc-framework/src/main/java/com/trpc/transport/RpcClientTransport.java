@@ -10,5 +10,7 @@ public interface RpcClientTransport {
      * @return data from server
      */
     Object sendRpcRequest(RpcRequest rpcRequest);
+
+    public void close();
 }
 
