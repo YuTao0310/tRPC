@@ -41,5 +41,5 @@ JDK Dynamic Proxy只能代理实现接口的类（相当于代理类和实际类
 - [x] Hessian序列化
 - [x] Kyro序列化
 - [x] Prototuff序列化
-- [ ] BIO socket实现上述序列化
-- [ ] 目前Netty在实现自定义序列化时，先把object序列化成bytes数组，然后再把bytes数组写进到ByteBuf中，考虑将两步变成一步，省略bytes再次写入ByteBuf过程，而是直接将object序列化后直接写进ByteBuf中
+- [x] BIO socket实现上述序列化
+- [ ] 目前在实现自定义序列化时，先把object序列化成bytes数组，然后再把bytes数组写进到ByteBuf中，考虑将两步变成一步，省略bytes再次写入ByteBuf过程，而是直接将object序列化后直接写进ByteBuf中

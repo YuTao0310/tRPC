@@ -32,7 +32,7 @@ public class SocketServerMain {
     }
     public static void main(String[] args) {
         ExecutorService executors = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("server-number");
-        int start = 9990, length = 5;
+        int start = 9990, length = 1;
         HelloService helloService = new HelloServiceImpl();
         for (int i = 0; i < length; i++) {
             RpcServiceConfig rpcServiceConfig = new RpcServiceConfig();
