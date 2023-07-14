@@ -8,6 +8,8 @@ import com.trpc.dto.RpcResponse;
 import com.trpc.register.ServiceDiscovery;
 import com.trpc.register.zk.ZkServiceDiscoveryImpl;
 import com.trpc.transport.RpcClientTransport;
+import com.trpc.transport.netty.codec.RpcMessageDecoder;
+import com.trpc.transport.netty.codec.RpcMessageEncoder;
 import com.trpc.utils.singleton.SingletonFactory;
 
 import io.netty.bootstrap.Bootstrap;
@@ -48,8 +50,8 @@ public class NettyRpcClient implements RpcClientTransport {
                     @Override
                     protected void initChannel(SocketChannel ch) {
                         ChannelPipeline p = ch.pipeline();
-                        p.addLast(new ObjectEncoder());
-                        p.addLast(new ObjectDecoder(Class::forName));             
+                        p.addLast(new RpcMessageDecoder());
+                        p.addLast(new RpcMessageEncoder());             
                         p.addLast(new NettyRpcClientHandler());
                     }
                 });

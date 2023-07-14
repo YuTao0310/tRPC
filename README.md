@@ -10,7 +10,7 @@ JDK自带序列化协议方式通过对象实现Serializable接口的方式来�
 
 - [x] 添加Cglib Dynamic Proxy方式来代理客户端。
 
-JDK Dynamic Proxy只能代理实现接口的类（相当于代理类和实际类是兄弟类的关系），Cglib Dynamic Proxy可以代理未实现任何接口的类（Cglib通过射给你吃呢个一个实际类的子类拦截对实际类的调用，代理类是实际类的子类），Cglib无法代理声明未final类型的类和方法。
+JDK Dynamic Proxy只能代理实现接口的类（相当于代理类和实际类是兄弟类的关系），Cglib Dynamic Proxy可以代理未实现任何接口的类（Cglib通过实现一个实际类的子类拦截对实际类的调用，代理类是实际类的子类），Cglib无法代理声明未final类型的类和方法。
 
 就两者效率而言，大部分情况下都是JDK动态代理更加优秀，随着JDK版本的升级，这个优势更加明显。
 
@@ -35,3 +35,11 @@ JDK Dynamic Proxy只能代理实现接口的类（相当于代理类和实际类
 - [x] JDK CGLIB动态代理
 - [x] 使用JDK自带的CompletableFuture异步获取结果，将获取结果的逻辑从NettyRpcClient移动到Proxy中来，如果需要应用到具体业务上可以考虑从Proxy层移动到上层应用中来
 - [x] 使用JDK自带的序列化协议进行编码解码(ObjectEncoder, ObjectDecoder)
+
+**6、netty和BIO socket中使用自定义序列化**
+
+- [x] Hessian序列化
+- [x] Kyro序列化
+- [x] Prototuff序列化
+- [ ] BIO socket实现上述序列化
+- [ ] 目前Netty在实现自定义序列化时，先把object序列化成bytes数组，然后再把bytes数组写进到ByteBuf中，考虑将两步变成一步，省略bytes再次写入ByteBuf过程，而是直接将object序列化后直接写进ByteBuf中

@@ -9,6 +9,8 @@ import com.trpc.config.RpcServiceConfig;
 import com.trpc.provider.ServiceProvider;
 import com.trpc.provider.impl.ZkServiceProviderImpl;
 import com.trpc.transport.RpcServerTransport;
+import com.trpc.transport.netty.codec.RpcMessageDecoder;
+import com.trpc.transport.netty.codec.RpcMessageEncoder;
 import com.trpc.utils.RuntimeUtil;
 import com.trpc.utils.singleton.SingletonFactory;
 import com.trpc.utils.threadpool.ThreadPoolFactoryUtil;
@@ -69,8 +71,8 @@ public class NettyRpcServer implements RpcServerTransport{
                         protected void initChannel(SocketChannel ch) {
                             // 30 秒之内没有收到客户端请求的话就关闭连接
                             ChannelPipeline p = ch.pipeline();
-                            p.addLast(new ObjectEncoder());
-                            p.addLast(new ObjectDecoder(Class::forName));
+                            p.addLast(new RpcMessageDecoder());
+                            p.addLast(new RpcMessageEncoder());
                             p.addLast(serviceHandlerGroup, new NettyRpcServerHandler());
                         }
                     });
