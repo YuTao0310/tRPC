@@ -34,12 +34,14 @@ public class NettyRpcClient implements RpcClientTransport {
 
     private final ServiceDiscovery serviceDiscovery;
     private final UnprocessedRequests unprocessedRequests;
+    private final ChannelProvider channelProvider;
     private final Bootstrap bootstrap;
     private final EventLoopGroup eventLoopGroup;
 
     public NettyRpcClient() {
         serviceDiscovery = SingletonFactory.getInstance(ZkServiceDiscoveryImpl.class);
         unprocessedRequests = SingletonFactory.getInstance(UnprocessedRequests.class);
+        channelProvider = SingletonFactory.getInstance(ChannelProvider.class);
         eventLoopGroup = new NioEventLoopGroup();
         bootstrap = new Bootstrap();
         bootstrap.group(eventLoopGroup)
@@ -63,6 +65,32 @@ public class NettyRpcClient implements RpcClientTransport {
         InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
         CompletableFuture<RpcResponse<Object>> resultFuture = new CompletableFuture<>();
         unprocessedRequests.put(rpcRequest.getRequestId(), resultFuture);
+        Channel channel = getChannel(inetSocketAddress);
+        channel.writeAndFlush(rpcRequest).addListener((ChannelFutureListener) future -> {
+            if (future.isSuccess()) {
+                log.info("client send message: [{}]", rpcRequest);
+            } else {
+                future.channel().close();
+                resultFuture.completeExceptionally(future.cause());
+                log.error("Send failed:", future.cause());
+            }
+        });
+        // 如果使用下述表达式，client端将不会终止运行
+        // channel.closeFuture().sync();
+        return resultFuture;
+    }
+
+    public Channel getChannel(InetSocketAddress inetSocketAddress) {
+        Channel channel = channelProvider.get(inetSocketAddress);
+        if (channel == null) {
+            channel = doConnect(inetSocketAddress);
+            channelProvider.set(inetSocketAddress, channel);
+        }
+        return channel;
+    }
+
+    @SneakyThrows
+    public Channel doConnect(InetSocketAddress inetSocketAddress) {
         CompletableFuture<Channel> completableFuture = new CompletableFuture<>();
         bootstrap.connect(inetSocketAddress).addListener((ChannelFutureListener) future -> {
             if (future.isSuccess()) {
@@ -82,18 +110,7 @@ public class NettyRpcClient implements RpcClientTransport {
         //     }
         // }).sync();
         // Channel channel = f.channel();
-        channel.writeAndFlush(rpcRequest).addListener((ChannelFutureListener) future -> {
-            if (future.isSuccess()) {
-                log.info("client send message: [{}]", rpcRequest);
-            } else {
-                future.channel().close();
-                resultFuture.completeExceptionally(future.cause());
-                log.error("Send failed:", future.cause());
-            }
-        });
-        // 如果使用下述表达式，client端将不会终止运行
-        // channel.closeFuture().sync();
-        return resultFuture;
+        return channel;
     }
 
     @Override
