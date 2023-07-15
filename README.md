@@ -49,3 +49,18 @@ JDK Dynamic Proxy只能代理实现接口的类（相当于代理类和实际类
 - [x] 在同一个进程中，client端连接同一个server时，发送多次消息时能够利用同一个channel，从而来防止重新建立链接，节省建链时间。
 
 **8、netty引用gzip压缩传输对象大小**
+
+**9、netty开启心跳机制**
+
+TCP短连接和长连接是看是否一次连接发送完消息之后还是否会用到。如果是短连接，socket或者channel发送完一次消息后不会再使用，在client端或者server端（一般client端）
+之后会手动close连接，或者说下次发送消息之后不会再使用该连接；如果是长连接，一般会是实现socket或者channel的复用，然后为了检测连接的可用性，会启用保活机制(keep-alive),
+保活机制中会用到心跳机制。
+
+我们可以通过两种方式实现心跳机制:使用 TCP 协议层面的 keepalive 机制;在应用层上实现自定义的心跳机制。
+
+虽然在 TCP 协议层面上, 提供了 keepalive 保活机制, 但是使用它有几个缺点:
+* 它不是 TCP 的标准协议, 并且是默认关闭的.
+* TCP keepalive 机制依赖于操作系统的实现, 默认的 keepalive 心跳时间是 两个小时, 并且对 keepalive 的修改需要系统调用(或者修改系统配置), 灵活性不够.
+* TCP keepalive 与 TCP 协议绑定, 因此如果需要更换为 UDP 协议时, keepalive 机制就失效了
+
+netty应用层可以通过配置IdleStateHandler来实现心跳机制。
