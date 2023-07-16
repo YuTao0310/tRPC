@@ -6,8 +6,9 @@ import java.net.Socket;
 
 import com.trpc.dto.RpcRequest;
 import com.trpc.dto.RpcResponse;
+import com.trpc.enums.SerializationTypeEnum;
+import com.trpc.extension.ExtensionLoader;
 import com.trpc.serialize.Serializer;
-import com.trpc.serialize.hessian.HessianSerializer;
 import com.trpc.transport.handler.RpcRequestHandler;
 import com.trpc.utils.singleton.SingletonFactory;
 
@@ -23,7 +24,7 @@ public class SocketRpcServerHandler implements Runnable {
     public SocketRpcServerHandler(Socket socket) {
         this.socket = socket;
         this.rpcRequestHandler = SingletonFactory.getInstance(RpcRequestHandler.class);
-        this.serializer = SingletonFactory.getInstance(HessianSerializer.class);
+        this.serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(SerializationTypeEnum.HESSIAN.getName());
     }
 
     @Override

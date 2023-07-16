@@ -7,10 +7,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.trpc.config.RpcServiceConfig;
 import com.trpc.enums.RpcErrorMessageEnum;
+import com.trpc.enums.ServiceRegistryEnum;
 import com.trpc.exception.RpcException;
+import com.trpc.extension.ExtensionLoader;
 import com.trpc.provider.ServiceProvider;
 import com.trpc.register.ServiceRegistry;
-import com.trpc.register.zk.ZkServiceRegistryImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +24,7 @@ public class ZkServiceProviderImpl implements ServiceProvider{
     public ZkServiceProviderImpl() {
         serviceMap = new ConcurrentHashMap<>();
         registeredService = ConcurrentHashMap.newKeySet();
-        serviceRegistry = new ZkServiceRegistryImpl();
+        serviceRegistry = ExtensionLoader.getExtensionLoader(ServiceRegistry.class).getExtension(ServiceRegistryEnum.ZK.getName());
     }
 
     @Override

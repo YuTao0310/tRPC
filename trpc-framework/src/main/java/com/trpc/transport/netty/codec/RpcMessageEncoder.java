@@ -7,8 +7,8 @@ import com.trpc.constants.RpcConstants;
 import com.trpc.dto.RpcMessage;
 import com.trpc.enums.CompressTypeEnum;
 import com.trpc.enums.SerializationTypeEnum;
+import com.trpc.extension.ExtensionLoader;
 import com.trpc.serialize.Serializer;
-import com.trpc.utils.singleton.SingletonFactory;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -60,11 +60,11 @@ public class RpcMessageEncoder extends MessageToByteEncoder<RpcMessage> {
                 // serialize the object
                 String codecName = SerializationTypeEnum.getName(rpcMessage.getCodec());
                 log.info("codec name: [{}] ", codecName);
-                Serializer serializer = (Serializer)SingletonFactory.getInstance(Class.forName(codecName));
+                Serializer serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(codecName);
                 bodyBytes = serializer.serialize(rpcMessage.getData());
                 // compress the bytes
                 String compressName = CompressTypeEnum.getName(rpcMessage.getCompress());
-                Compress compress = (Compress)SingletonFactory.getInstance(Class.forName(compressName));
+                Compress compress = ExtensionLoader.getExtensionLoader(Compress.class).getExtension(compressName);
                 bodyBytes = compress.compress(bodyBytes);
                 fullLength += bodyBytes.length;
             }

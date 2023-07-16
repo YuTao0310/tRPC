@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 public enum SerializationTypeEnum {
 
-    KYRO((byte) 0x01, "com.trpc.serialize.hessian.KyroSerializer"),
-    PROTOSTUFF((byte) 0x02, "com.trpc.serialize.protostuff.ProtostuffSerializer"),
-    HESSIAN((byte) 0X03, "com.trpc.serialize.hessian.HessianSerializer");
+    KYRO((byte) 0x01, "kyro"),
+    PROTOSTUFF((byte) 0x02, "protobuff"),
+    HESSIAN((byte) 0X03, "hessian");
 
     private final byte code;
     private final String name;

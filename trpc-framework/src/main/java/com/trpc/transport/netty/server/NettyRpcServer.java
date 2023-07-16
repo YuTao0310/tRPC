@@ -4,13 +4,13 @@ import java.util.concurrent.TimeUnit;
 
 import com.trpc.config.CustomShutdownHook;
 import com.trpc.config.RpcServiceConfig;
+import com.trpc.enums.ServiceProviderEnum;
+import com.trpc.extension.ExtensionLoader;
 import com.trpc.provider.ServiceProvider;
-import com.trpc.provider.impl.ZkServiceProviderImpl;
 import com.trpc.transport.RpcServerTransport;
 import com.trpc.transport.netty.codec.RpcMessageDecoder;
 import com.trpc.transport.netty.codec.RpcMessageEncoder;
 import com.trpc.utils.RuntimeUtil;
-import com.trpc.utils.singleton.SingletonFactory;
 import com.trpc.utils.threadpool.ThreadPoolFactoryUtil;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -36,7 +36,7 @@ public class NettyRpcServer implements RpcServerTransport{
     private int port;
 
     public NettyRpcServer() {
-        serviceProvider = SingletonFactory.getInstance(ZkServiceProviderImpl.class);
+        serviceProvider = ExtensionLoader.getExtensionLoader(ServiceProvider.class).getExtension(ServiceProviderEnum.ZK.getName());
     }
 
     @Override

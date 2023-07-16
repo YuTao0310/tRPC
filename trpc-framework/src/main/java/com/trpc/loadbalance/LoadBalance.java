@@ -3,10 +3,12 @@ package com.trpc.loadbalance;
 import java.util.List;
 
 import com.trpc.dto.RpcRequest;
+import com.trpc.extension.SPI;
 
 /**
  * Interface to the load balancing policy
  */
+@SPI
 public interface LoadBalance {
     /**
      * Choose one from the list of existing service addresses list

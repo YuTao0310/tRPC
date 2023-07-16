@@ -4,10 +4,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.trpc.dto.RpcRequest;
+import com.trpc.enums.ServiceProviderEnum;
 import com.trpc.exception.RpcException;
+import com.trpc.extension.ExtensionLoader;
 import com.trpc.provider.ServiceProvider;
-import com.trpc.provider.impl.ZkServiceProviderImpl;
-import com.trpc.utils.singleton.SingletonFactory;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +16,7 @@ public class RpcRequestHandler {
     private final ServiceProvider serviceProvider;
 
     public RpcRequestHandler() {
-        serviceProvider = SingletonFactory.getInstance(ZkServiceProviderImpl.class);
+        serviceProvider = ExtensionLoader.getExtensionLoader(ServiceProvider.class).getExtension(ServiceProviderEnum.ZK.getName());
     }
 
     /**

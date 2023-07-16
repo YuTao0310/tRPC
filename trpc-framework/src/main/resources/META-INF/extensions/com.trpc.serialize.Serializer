@@ -1,0 +1,3 @@
+kyro=com.trpc.serialize.kyro.KryoSerializer
+protostuff=com.trpc.serialize.protostuff.ProtostuffSerializer
+hessian=com.trpc.serialize.hessian.HessianSerializer

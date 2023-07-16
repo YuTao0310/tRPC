@@ -10,8 +10,9 @@ import com.trpc.dto.RpcRequest;
 import com.trpc.dto.RpcResponse;
 import com.trpc.enums.CompressTypeEnum;
 import com.trpc.enums.SerializationTypeEnum;
+import com.trpc.enums.ServiceDiscoveryEnum;
+import com.trpc.extension.ExtensionLoader;
 import com.trpc.register.ServiceDiscovery;
-import com.trpc.register.zk.ZkServiceDiscoveryImpl;
 import com.trpc.transport.RpcClientTransport;
 import com.trpc.transport.netty.codec.RpcMessageDecoder;
 import com.trpc.transport.netty.codec.RpcMessageEncoder;
@@ -43,7 +44,7 @@ public class NettyRpcClient implements RpcClientTransport {
     private final EventLoopGroup eventLoopGroup;
 
     public NettyRpcClient() {
-        serviceDiscovery = SingletonFactory.getInstance(ZkServiceDiscoveryImpl.class);
+        serviceDiscovery = ExtensionLoader.getExtensionLoader(ServiceDiscovery.class).getExtension(ServiceDiscoveryEnum.ZK.getName());
         unprocessedRequests = SingletonFactory.getInstance(UnprocessedRequests.class);
         channelProvider = SingletonFactory.getInstance(ChannelProvider.class);
         eventLoopGroup = new NioEventLoopGroup();

@@ -1,8 +1,11 @@
 package com.trpc.serialize;
 
+import com.trpc.extension.SPI;
+
 /**
  * 序列化接口，所有序列化类都要实现这个接口
  */
+@SPI
 public interface Serializer {
     /**
      * 序列化

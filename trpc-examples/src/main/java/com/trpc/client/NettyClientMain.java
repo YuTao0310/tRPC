@@ -52,7 +52,7 @@ public class NettyClientMain {
     @SneakyThrows
     public static void main(String[] args) {
         ExecutorService executor = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("client-number");
-        int sum = 3;
+        int sum = 1;
         for (int i = 0; i < sum; i++) {
             executor.execute(new ClientRunnable());
         }

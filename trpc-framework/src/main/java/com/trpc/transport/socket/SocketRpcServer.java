@@ -8,10 +8,10 @@ import java.util.concurrent.ExecutorService;
 
 import com.trpc.config.CustomShutdownHook;
 import com.trpc.config.RpcServiceConfig;
+import com.trpc.enums.ServiceProviderEnum;
+import com.trpc.extension.ExtensionLoader;
 import com.trpc.provider.ServiceProvider;
-import com.trpc.provider.impl.ZkServiceProviderImpl;
 import com.trpc.transport.RpcServerTransport;
-import com.trpc.utils.singleton.SingletonFactory;
 import com.trpc.utils.threadpool.ThreadPoolFactoryUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class SocketRpcServer implements RpcServerTransport{
 
     public SocketRpcServer() {
         threadPool = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("socket-server-rpc-pool");
-        serviceProvider = SingletonFactory.getInstance(ZkServiceProviderImpl.class);
+        serviceProvider = ExtensionLoader.getExtensionLoader(ServiceProvider.class).getExtension(ServiceProviderEnum.ZK.getName());;
     }
 
     @Override

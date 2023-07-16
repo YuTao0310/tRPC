@@ -1,7 +1,9 @@
 package com.trpc.provider;
 
 import com.trpc.config.RpcServiceConfig;
+import com.trpc.extension.SPI;
 
+@SPI
 public interface ServiceProvider {
 
     /**

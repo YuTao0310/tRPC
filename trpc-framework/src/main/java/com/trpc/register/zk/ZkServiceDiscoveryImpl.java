@@ -4,13 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 
 import com.trpc.dto.RpcRequest;
+import com.trpc.enums.LoadBalanceEnum;
 import com.trpc.enums.RpcErrorMessageEnum;
 import com.trpc.exception.RpcException;
+import com.trpc.extension.ExtensionLoader;
 import com.trpc.loadbalance.LoadBalance;
-import com.trpc.loadbalance.loadbalancer.ConsistentHashLoadBalance;
 import com.trpc.register.ServiceDiscovery;
 import com.trpc.utils.CollectionUtil;
-import com.trpc.utils.singleton.SingletonFactory;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -23,7 +23,7 @@ public class ZkServiceDiscoveryImpl implements ServiceDiscovery {
     private final LoadBalance loadBalance;
 
     public ZkServiceDiscoveryImpl() {
-        loadBalance = SingletonFactory.getInstance(ConsistentHashLoadBalance.class);
+        loadBalance = ExtensionLoader.getExtensionLoader(LoadBalance.class).getExtension(LoadBalanceEnum.LOADBALANCE.getName());
     }
     @Override
     public InetSocketAddress lookupService(RpcRequest rpcRequest) {

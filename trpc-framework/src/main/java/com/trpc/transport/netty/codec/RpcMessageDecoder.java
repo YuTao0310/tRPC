@@ -9,8 +9,8 @@ import com.trpc.dto.RpcRequest;
 import com.trpc.dto.RpcResponse;
 import com.trpc.enums.CompressTypeEnum;
 import com.trpc.enums.SerializationTypeEnum;
+import com.trpc.extension.ExtensionLoader;
 import com.trpc.serialize.Serializer;
-import com.trpc.utils.singleton.SingletonFactory;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -109,27 +109,23 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
         }
         int bodyLength = fullLength - RpcConstants.HEAD_LENGTH;
         if (bodyLength > 0) {
-            try {
-                byte[] bs = new byte[bodyLength];
-                in.readBytes(bs);
-                // decompress the bytes
-                String compressName = CompressTypeEnum.getName(compressType);
-                Compress compress = (Compress)SingletonFactory.getInstance(Class.forName(compressName));
-                bs = compress.decompress(bs);
-                // deserialize the object
-                String codecName = SerializationTypeEnum.getName(rpcMessage.getCodec());
-                log.info("codec name: [{}] ", codecName);
-                Serializer serializer = (Serializer)SingletonFactory.getInstance(Class.forName(codecName));
-                if (messageType == RpcConstants.REQUEST_TYPE) {
-                    RpcRequest tmpValue = serializer.deserialize(bs, RpcRequest.class);
-                    rpcMessage.setData(tmpValue);
-                } else {
-                    RpcResponse tmpValue = serializer.deserialize(bs, RpcResponse.class);
-                    rpcMessage.setData(tmpValue);
-                }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }   
+            byte[] bs = new byte[bodyLength];
+            in.readBytes(bs);
+            // decompress the bytes
+            String compressName = CompressTypeEnum.getName(compressType);
+            Compress compress = ExtensionLoader.getExtensionLoader(Compress.class).getExtension(compressName);
+            bs = compress.decompress(bs);
+            // deserialize the object
+            String codecName = SerializationTypeEnum.getName(rpcMessage.getCodec());
+            log.info("codec name: [{}] ", codecName);
+            Serializer serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(codecName);
+            if (messageType == RpcConstants.REQUEST_TYPE) {
+                RpcRequest tmpValue = serializer.deserialize(bs, RpcRequest.class);
+                rpcMessage.setData(tmpValue);
+            } else {
+                RpcResponse tmpValue = serializer.deserialize(bs, RpcResponse.class);
+                rpcMessage.setData(tmpValue);
+            } 
         }
         return rpcMessage;
     }

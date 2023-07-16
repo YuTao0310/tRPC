@@ -49,7 +49,7 @@ public final class CuratorUtils {
             if (REGISTERED_PATH_SET.contains(path) || zkClient.checkExists().forPath(path) != null) {
                 log.info("The node already exists. The node is:[{}]", path);
             } else {
-                //eg: /my-rpc/github.javaguide.HelloService/127.0.0.1:9999
+                //eg: /my-rpc/com.trpc.HelloService/127.0.0.1:9999
                 zkClient.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath(path);
                 log.info("The node was created successfully. The node is:[{}]", path);
             }
@@ -62,7 +62,7 @@ public final class CuratorUtils {
     /**
      * Gets the children under a node
      *
-     * @param rpcServiceName rpc service name eg:github.javaguide.HelloServicetest2version1
+     * @param rpcServiceName rpc service name eg:com.trpc.HelloServicetest2version1
      * @return All child nodes under the specified node
      */
     public static List<String> getChildrenNodes(CuratorFramework zkClient, String rpcServiceName) {
@@ -127,7 +127,7 @@ public final class CuratorUtils {
     /**
      * Registers to listen for changes to the specified node
      *
-     * @param rpcServiceName rpc service name eg:github.javaguide.HelloServicetest2version
+     * @param rpcServiceName rpc service name eg:com.trpc.HelloServicetest2version
      */
     @SuppressWarnings({"resource", "deprecation"})
     private static void registerWatcher(String rpcServiceName, CuratorFramework zkClient) throws Exception {

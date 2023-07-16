@@ -7,13 +7,13 @@ import java.net.Socket;
 
 import com.trpc.dto.RpcRequest;
 import com.trpc.dto.RpcResponse;
+import com.trpc.enums.SerializationTypeEnum;
+import com.trpc.enums.ServiceDiscoveryEnum;
 import com.trpc.exception.RpcException;
+import com.trpc.extension.ExtensionLoader;
 import com.trpc.register.ServiceDiscovery;
-import com.trpc.register.zk.ZkServiceDiscoveryImpl;
 import com.trpc.serialize.Serializer;
-import com.trpc.serialize.hessian.HessianSerializer;
 import com.trpc.transport.RpcClientTransport;
-import com.trpc.utils.singleton.SingletonFactory;
 
 
 
@@ -22,8 +22,8 @@ public class SocketRpcClient implements RpcClientTransport{
     private final Serializer serializer;
     
     public SocketRpcClient() {
-        serviceDiscovery  = SingletonFactory.getInstance(ZkServiceDiscoveryImpl.class);
-        serializer = SingletonFactory.getInstance(HessianSerializer.class);
+        serviceDiscovery  = ExtensionLoader.getExtensionLoader(ServiceDiscovery.class).getExtension(ServiceDiscoveryEnum.ZK.getName());
+        serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(SerializationTypeEnum.HESSIAN.getName());
     }
 
     @Override
