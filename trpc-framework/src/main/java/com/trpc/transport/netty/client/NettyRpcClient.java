@@ -2,9 +2,14 @@ package com.trpc.transport.netty.client;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
+import com.trpc.constants.RpcConstants;
+import com.trpc.dto.RpcMessage;
 import com.trpc.dto.RpcRequest;
 import com.trpc.dto.RpcResponse;
+import com.trpc.enums.CompressTypeEnum;
+import com.trpc.enums.SerializationTypeEnum;
 import com.trpc.register.ServiceDiscovery;
 import com.trpc.register.zk.ZkServiceDiscoveryImpl;
 import com.trpc.transport.RpcClientTransport;
@@ -26,6 +31,7 @@ import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,19 +68,32 @@ public class NettyRpcClient implements RpcClientTransport {
     @Override
     @SneakyThrows
     public Object sendRpcRequest(RpcRequest rpcRequest) {
-        InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
+        // build return value
         CompletableFuture<RpcResponse<Object>> resultFuture = new CompletableFuture<>();
-        unprocessedRequests.put(rpcRequest.getRequestId(), resultFuture);
+        // get server address
+        InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
+        // get  server address related channel
         Channel channel = getChannel(inetSocketAddress);
-        channel.writeAndFlush(rpcRequest).addListener((ChannelFutureListener) future -> {
-            if (future.isSuccess()) {
-                log.info("client send message: [{}]", rpcRequest);
-            } else {
-                future.channel().close();
-                resultFuture.completeExceptionally(future.cause());
-                log.error("Send failed:", future.cause());
-            }
-        });
+        if (channel.isActive()) {
+            // put unprocessed request
+            unprocessedRequests.put(rpcRequest.getRequestId(), resultFuture);
+            RpcMessage rpcMessage = RpcMessage.builder().data(rpcRequest)
+                    .codec(SerializationTypeEnum.HESSIAN.getCode())
+                    .compress(CompressTypeEnum.GZIP.getCode())
+                    .messageType(RpcConstants.REQUEST_TYPE).build();
+            channel.writeAndFlush(rpcMessage).addListener((ChannelFutureListener) future -> {
+                if (future.isSuccess()) {
+                    log.info("client send message: [{}]", rpcMessage);
+                } else {
+                    future.channel().close();
+                    resultFuture.completeExceptionally(future.cause());
+                    log.error("Send failed:", future.cause());
+                }
+            });
+        } else {
+            throw new IllegalStateException();
+        }
+
         // 如果使用下述表达式，client端将不会终止运行
         // channel.closeFuture().sync();
         return resultFuture;

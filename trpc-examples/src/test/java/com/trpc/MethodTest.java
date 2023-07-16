@@ -23,7 +23,7 @@ public class MethodTest {
         try {
             // for (Method m : MethodTest.class.getMethods()) System.out.println(m);
             Method method1 = MethodTest.class.getDeclaredMethods()[0];
-            System.out.println("method1 is " + method1);
+            System.out.println("method1 is " + method1.getName());
             Method method2 = MethodTest.class.getMethod("getMethodsTest", (Class<?>[] )null);
             System.out.println("method2 is " + method2);
             method2 = MethodTest.class.getMethod("getMethodsTest");

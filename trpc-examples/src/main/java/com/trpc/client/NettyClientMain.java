@@ -17,7 +17,7 @@ public class NettyClientMain {
         RpcClientProxy rpcClientProxy = new RpcClientJDKProxy(rpcClientTransport, rpcServiceConfig);
         // RpcClientProxy rpcClientProxy = new RpcClientCglibProxy(rpcClientTransport, rpcServiceConfig);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             System.out.println(helloService.hello(new Hello("detailed message" + i, "detailed description" + i)));
             try {
                 Thread.sleep(6000);

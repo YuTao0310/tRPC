@@ -1,8 +1,12 @@
 package com.trpc.transport.netty.server;
 
+import com.trpc.constants.RpcConstants;
+import com.trpc.dto.RpcMessage;
 import com.trpc.dto.RpcRequest;
 import com.trpc.dto.RpcResponse;
+import com.trpc.enums.CompressTypeEnum;
 import com.trpc.enums.RpcResponseCodeEnum;
+import com.trpc.enums.SerializationTypeEnum;
 import com.trpc.transport.handler.RpcRequestHandler;
 import com.trpc.utils.singleton.SingletonFactory;
 
@@ -28,18 +32,34 @@ public class NettyRpcServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         try {
-            RpcRequest rpcRequest = (RpcRequest)msg;
-            RpcResponse<Object> rpcResponse;
-            Object result = rpcRequestHandler.handle(rpcRequest);
-            log.info(String.format("server get result: %s", result.toString()));
-            if (ctx.channel().isActive() && ctx.channel().isWritable()) {
-                rpcResponse = RpcResponse.success(result, rpcRequest.getRequestId());
-            } else {
-                rpcResponse = RpcResponse.fail(RpcResponseCodeEnum.FAIL);
-                log.error("not writable now, message dropped");
+            if (msg instanceof RpcMessage) {
+                log.info("server receive msg: [{}] ", msg);
+                byte messageType = ((RpcMessage) msg).getMessageType();
+                RpcMessage rpcMessage = new RpcMessage();
+                rpcMessage.setCodec(SerializationTypeEnum.HESSIAN.getCode());
+                rpcMessage.setCompress(CompressTypeEnum.GZIP.getCode());
+                if (messageType == RpcConstants.HEARTBEAT_REQUEST_TYPE) {
+                    rpcMessage.setMessageType(RpcConstants.HEARTBEAT_RESPONSE_TYPE);
+                    rpcMessage.setData(RpcConstants.PONG);
+                } else {
+                    RpcRequest rpcRequest = (RpcRequest) ((RpcMessage) msg).getData();
+                    // Execute the target method (the method the client needs to execute) and return the method result
+                    Object result = rpcRequestHandler.handle(rpcRequest);
+                    log.info(String.format("server get result: %s", result.toString()));
+                    rpcMessage.setMessageType(RpcConstants.RESPONSE_TYPE);
+                    if (ctx.channel().isActive() && ctx.channel().isWritable()) {
+                        RpcResponse<Object> rpcResponse = RpcResponse.success(result, rpcRequest.getRequestId());
+                        rpcMessage.setData(rpcResponse);
+                    } else {
+                        RpcResponse<Object> rpcResponse = RpcResponse.fail(RpcResponseCodeEnum.FAIL);
+                        rpcMessage.setData(rpcResponse);
+                        log.error("not writable now, message dropped");
+                    }
+                }
+                ctx.writeAndFlush(rpcMessage).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
             }
-            ctx.writeAndFlush(rpcResponse).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
         } finally {
+            //Ensure that ByteBuf is released, otherwise there may be memory leaks
             ReferenceCountUtil.release(msg);
         }
     }

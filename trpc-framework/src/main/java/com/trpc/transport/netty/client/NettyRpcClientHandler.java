@@ -1,10 +1,17 @@
 package com.trpc.transport.netty.client;
 
+import java.net.InetSocketAddress;
+
+import com.trpc.constants.RpcConstants;
+import com.trpc.dto.RpcMessage;
 import com.trpc.dto.RpcResponse;
 import com.trpc.utils.singleton.SingletonFactory;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,11 +29,19 @@ public class NettyRpcClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         try {
             log.info("client receive msg: [{}]", msg);
-            RpcResponse<Object> rpcResponse = (RpcResponse<Object>) msg;
-            unprocessedRequests.complete(rpcResponse);
+            if (msg instanceof RpcMessage) {
+                RpcMessage tmp = (RpcMessage) msg;
+                byte messageType = tmp.getMessageType();
+                if (messageType == RpcConstants.HEARTBEAT_RESPONSE_TYPE) {
+                    log.info("heart [{}]", tmp.getData());
+                } else if (messageType == RpcConstants.RESPONSE_TYPE) {
+                    RpcResponse<Object> rpcResponse = (RpcResponse<Object>) tmp.getData();
+                    unprocessedRequests.complete(rpcResponse);
+                }
+            }
         } finally {
             ReferenceCountUtil.release(msg);
-        }        
+        }       
     }
 
     /**
