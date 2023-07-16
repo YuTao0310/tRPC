@@ -129,6 +129,7 @@ public final class CuratorUtils {
      *
      * @param rpcServiceName rpc service name eg:github.javaguide.HelloServicetest2version
      */
+    @SuppressWarnings({"resource", "deprecation"})
     private static void registerWatcher(String rpcServiceName, CuratorFramework zkClient) throws Exception {
         String servicePath = ZK_REGISTER_ROOT_PATH + "/" + rpcServiceName;
         PathChildrenCache pathChildrenCache = new PathChildrenCache(zkClient, servicePath, true);

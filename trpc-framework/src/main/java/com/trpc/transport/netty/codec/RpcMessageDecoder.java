@@ -1,7 +1,6 @@
 package com.trpc.transport.netty.codec;
 
 import java.util.Arrays;
-import java.util.List;
 
 import com.trpc.compress.Compress;
 import com.trpc.constants.RpcConstants;
@@ -15,7 +14,6 @@ import com.trpc.utils.singleton.SingletonFactory;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -86,7 +84,7 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
     }
 
 
-
+    @SuppressWarnings("rawtypes")
     private Object decodeFrame(ByteBuf in) {
         // note: must read ByteBuf in order
         checkMagicNumber(in);

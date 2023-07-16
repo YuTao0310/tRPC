@@ -3,8 +3,6 @@ package com.trpc;
 import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.Test;
-
-import com.trpc.hello.Hello;
 import com.trpc.hello.HelloService;
 
 public class MethodTest {

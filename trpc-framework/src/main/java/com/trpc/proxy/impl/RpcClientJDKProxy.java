@@ -53,7 +53,7 @@ public class RpcClientJDKProxy implements RpcClientProxy, InvocationHandler{
 
     @Override
     @SneakyThrows
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "null"})
     public Object invoke(Object proxy, Method method, Object[] args) {
         log.info("JDK Dynamic proxy invoked method: [{}]", method.getName());
         RpcRequest rpcRequest = RpcRequest.builder().methodName(method.getName())

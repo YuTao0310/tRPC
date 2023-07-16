@@ -11,12 +11,10 @@ import com.trpc.dto.RpcResponse;
 import com.trpc.exception.SerializeException;
 import com.trpc.serialize.Serializer;
 
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Kryo serialization class, Kryo serialization efficiency is very high, but only compatible with Java language
  */
-@Slf4j
 public class KryoSerializer implements Serializer {
 
     /**

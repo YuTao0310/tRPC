@@ -1,6 +1,5 @@
 package com.trpc.client;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -8,7 +7,6 @@ import com.trpc.config.RpcServiceConfig;
 import com.trpc.hello.Hello;
 import com.trpc.hello.HelloService;
 import com.trpc.proxy.RpcClientProxy;
-import com.trpc.proxy.impl.RpcClientCglibProxy;
 import com.trpc.proxy.impl.RpcClientJDKProxy;
 import com.trpc.transport.RpcClientTransport;
 import com.trpc.transport.netty.client.NettyRpcClient;

@@ -1,6 +1,5 @@
 package com.trpc.register.zk;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import com.trpc.register.ServiceRegistry;
 import java.net.InetSocketAddress;
@@ -8,7 +7,6 @@ import java.net.InetSocketAddress;
 /**
  * service registration  based on zookeeper
  */
-@Slf4j
 public class ZkServiceRegistryImpl implements ServiceRegistry {
 
     @Override

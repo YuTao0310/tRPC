@@ -46,7 +46,7 @@ public class RpcClientCglibProxy implements RpcClientProxy ,MethodInterceptor {
         return (T)enhancer.create();
     }
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "null"})
     public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         log.info("Cglib Dynamic Proxy invoked method: " + method.getName());
         RpcRequest rpcRequest = RpcRequest.builder().methodName(method.getName())

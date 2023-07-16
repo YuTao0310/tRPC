@@ -2,13 +2,13 @@ package com.trpc;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 public class GenericTest {
     
     @Test
+    @SuppressWarnings({"rawtypes", "unused"})
     public void StringTest() {
         Class clazz = (new ArrayList<Object>() {}).getClass();
         System.out.println(clazz);

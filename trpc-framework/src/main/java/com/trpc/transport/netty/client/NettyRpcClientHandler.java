@@ -1,7 +1,5 @@
 package com.trpc.transport.netty.client;
 
-import java.net.InetSocketAddress;
-
 import com.trpc.constants.RpcConstants;
 import com.trpc.dto.RpcMessage;
 import com.trpc.dto.RpcResponse;
