@@ -63,7 +63,11 @@ TCP短连接和长连接是看是否一次连接发送完消息之后还是否�
 * TCP keepalive 机制依赖于操作系统的实现, 默认的 keepalive 心跳时间是 两个小时, 并且对 keepalive 的修改需要系统调用(或者修改系统配置), 灵活性不够.
 * TCP keepalive 与 TCP 协议绑定, 因此如果需要更换为 UDP 协议时, keepalive 机制就失效了
 
-netty应用层可以通过配置IdleStateHandler来实现心跳机制。
+netty应用层可以通过配置IdleStateHandler来实现心跳机制，IdleStateHandler开启定时任务，当任务超时会触发相应地读写事件，然后在IdleStateHandler的
+userEventTriggered进行相应事件即可。
+
+- [x] server端开启心跳机制
+- [x] client端开启心跳机制
 
 **10、添加自定义的通信协议**
 

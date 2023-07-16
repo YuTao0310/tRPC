@@ -58,6 +58,8 @@ public class NettyRpcClient implements RpcClientTransport {
                     @Override
                     protected void initChannel(SocketChannel ch) {
                         ChannelPipeline p = ch.pipeline();
+                        // If no data is sent to the server within 3 seconds, a heartbeat request is sent
+                        p.addLast(new IdleStateHandler(0, 3, 0, TimeUnit.SECONDS));
                         p.addLast(new RpcMessageDecoder());
                         p.addLast(new RpcMessageEncoder());             
                         p.addLast(new NettyRpcClientHandler());

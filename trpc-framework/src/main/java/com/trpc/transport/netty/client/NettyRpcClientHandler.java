@@ -5,9 +5,12 @@ import java.net.InetSocketAddress;
 import com.trpc.constants.RpcConstants;
 import com.trpc.dto.RpcMessage;
 import com.trpc.dto.RpcResponse;
+import com.trpc.enums.CompressTypeEnum;
+import com.trpc.enums.SerializationTypeEnum;
 import com.trpc.utils.singleton.SingletonFactory;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
@@ -42,6 +45,25 @@ public class NettyRpcClientHandler extends ChannelInboundHandlerAdapter {
         } finally {
             ReferenceCountUtil.release(msg);
         }       
+    }
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if (evt instanceof IdleStateEvent) {
+            IdleState state = ((IdleStateEvent) evt).state();
+            Channel channel = ctx.channel();
+            if (state == IdleState.WRITER_IDLE) {
+                log.info("write idle happen [{}]", ctx.channel().remoteAddress());
+                RpcMessage rpcMessage = new RpcMessage();
+                rpcMessage.setCodec(SerializationTypeEnum.PROTOSTUFF.getCode());
+                rpcMessage.setCompress(CompressTypeEnum.GZIP.getCode());
+                rpcMessage.setMessageType(RpcConstants.HEARTBEAT_REQUEST_TYPE);
+                rpcMessage.setData(RpcConstants.PING);
+                channel.writeAndFlush(rpcMessage).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+            }
+        } else {
+            super.userEventTriggered(ctx, evt);
+        }
     }
 
     /**
