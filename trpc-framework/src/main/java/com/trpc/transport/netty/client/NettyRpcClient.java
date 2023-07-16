@@ -85,7 +85,9 @@ public class NettyRpcClient implements RpcClientTransport {
                     .messageType(RpcConstants.REQUEST_TYPE).build();
             channel.writeAndFlush(rpcMessage).addListener((ChannelFutureListener) future -> {
                 if (future.isSuccess()) {
-                    log.info("client send message: [{}]", rpcMessage);
+                    InetSocketAddress localAddress = (InetSocketAddress)channel.localAddress();
+                    InetSocketAddress remoteAddress = (InetSocketAddress)channel.remoteAddress();
+                    log.info("client {} send message: [{}] {}", localAddress, rpcMessage, remoteAddress);
                 } else {
                     future.channel().close();
                     resultFuture.completeExceptionally(future.cause());

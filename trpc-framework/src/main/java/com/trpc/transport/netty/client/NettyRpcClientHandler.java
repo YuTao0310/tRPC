@@ -27,6 +27,13 @@ public class NettyRpcClientHandler extends ChannelInboundHandlerAdapter {
         unprocessedRequests = SingletonFactory.getInstance(UnprocessedRequests.class);
     }
 
+    // @Override
+    // public void channelActive(ChannelHandlerContext ctx) {
+    //     InetSocketAddress localAddress = (InetSocketAddress)ctx.channel().localAddress();
+    //     InetSocketAddress remoteAddress = (InetSocketAddress)ctx.channel().remoteAddress();
+    //     log.info("client " + localAddress + " connects to " + remoteAddress );
+    // }
+
     @Override
     @SuppressWarnings("unchecked")
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
