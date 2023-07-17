@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 public class CloneTest implements Cloneable {
     
     @Test
+    @SuppressWarnings("unused")
     public void test1() {
         CloneTest t1 = new CloneTest();
         try {
