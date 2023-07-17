@@ -1,5 +1,7 @@
 package com.trpc.config;
 
+import com.trpc.transport.RpcServerTransport;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,13 +36,13 @@ public class RpcServiceConfig {
      * target host (in server)
      */
     @Builder.Default
-    private String host = "127.0.0.1";
+    private String host = RpcServerTransport.DEFAULT_HOST;
 
     /**
      * target port (in server)
      */
     @Builder.Default
-    private int port = 9998;
+    private int port = RpcServerTransport.DEFAULT_PORT;
 
     public String getRpcServiceName() {
         return this.getServiceName() + this.getGroup() + this.getVersion();

@@ -103,3 +103,7 @@ codec代表解编码类型、compress代表解压缩类型，RequestId代表请�
 RpcMessage统一了传输过程中的对象，其`data`字段包含了messageType的四种类型
 
 - [x] LengthFieldBasedFrameDecoder替代ByteToMessageDecoder解决TCP粘包、拆包问题
+
+**11、添加注解来注册和消费服务**
+
+- [ ] 在注解来注册和消费服务前提下，提供上层自定义配置host port方式

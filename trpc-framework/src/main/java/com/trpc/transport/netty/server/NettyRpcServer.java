@@ -2,6 +2,8 @@ package com.trpc.transport.netty.server;
 
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.stereotype.Component;
+
 import com.trpc.config.CustomShutdownHook;
 import com.trpc.config.RpcServiceConfig;
 import com.trpc.enums.ServiceProviderEnum;
@@ -29,11 +31,12 @@ import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Component
 public class NettyRpcServer implements RpcServerTransport{
     private final ServiceProvider serviceProvider;
 
-    private String host;
-    private int port;
+    private String host = DEFAULT_HOST;
+    private int port = DEFAULT_PORT;
 
     public NettyRpcServer() {
         serviceProvider = ExtensionLoader.getExtensionLoader(ServiceProvider.class).getExtension(ServiceProviderEnum.ZK.getName());

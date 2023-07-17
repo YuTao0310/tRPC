@@ -4,7 +4,9 @@
 - [x] 弄清楚netty默认情况下是不是发完一次消息之后需要重新建链: 没有复用channel情况下，每次发送都需要重新建链。
 - [x] 理解IdleStateHandler设置心跳机制的原理
 - [x] 弄清楚ButeBuf原理
-- [ ] 弄清楚LengthFieldBasedFrameDecoder原理
+- [x] 弄清楚LengthFieldBasedFrameDecoder原理
+- [ ] 回忆注解原理
+- [ ] 弄懂dubbo原理
 - [ ] 各种哈希策略的底层原理
 - [ ] 各种序列化方式的底层原理
 - [ ] ChannelHandler传递消息的底层原理
